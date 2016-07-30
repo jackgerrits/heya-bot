@@ -1,48 +1,88 @@
-'use strict';
-
 var registry = require("../intentHandler.js");
 
 const ForecastIO = require('forecast-io');
-const forecast = new ForecastIO('');
+const forecast = new ForecastIO('***REMOVED***');
 
 const cities = require("../cities.json");
 
-var city = cities['Melbourne'];
-
-if (city) {
-  // Get weather forecast using Dark Sky API. Date is YYYY-MM-DD. All parameters
-  // are string types.
-  forecast
-    .latitude(city.lat.toString())
-    .longitude(city.lon.toString())
-    .time('2016-07-31')
-    .units('ca')
-    .language('en')
-    .exclude('minutely,hourly')
-    .get()
-    .then(res => {
-      console.log(res)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}
-else {
-  console.log("NOT_FOUND");
+function round_1dp(number) {
+  return Math.round(number*10)/10;
 }
 
+var city = cities['Melbourne']; // get lat-lon entry for city
+forecast
+  .latitude(city.lat.toString())
+  .longitude(city.lon.toString())
+  .units('ca')
+  .language('en')
+  .get()
+  .then(res => {
+    var result = JSON.parse(res);
+    console.log("There's a " + result.currently.
+      precipProbability.toString() + "% chance of rain.");
+    console.log("It's " + result.currently.summary.toLowerCase() + " and " +
+      round_1dp(result.currently.temperature).toString() + "°C outside.");
+  })
+  .catch(err => {
+    console.log(err)
+  })
 
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
     if (registry.firstEntityValue(entities, "intent") == "weather_rain") {
-        returnObject.execStatus = "SUCCESS";
-        returnObject.context.result = "Will it rain? Find out soon!";
+        var city = cities['Melbourne']; // get lat-lon entry for city
+        if (city) {
+          // Get weather forecast using Dark Sky API. Date is YYYY-MM-DD.
+          // All parameters are string types.
+          forecast
+            .latitude(city.lat.toString())
+            .longitude(city.lon.toString())
+            .units('ca')
+            .language('en')
+            .get()
+            .then(res => {
+              var result = JSON.parse(res);
+
+              returnObject.execStatus = "SUCCESS";
+              returnObject.context.result = "There's a " + result.currently.
+                precipProbability.toString() + "% chance of rain.";
+              callback(returnObject);
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+        else {
+          console.log("NOT_FOUND");
+        }
     }
     else if (registry.firstEntityValue(entities, "intent") == "weather_temperature") {
-      returnObject.execStatus = "SUCCESS";
-      returnObject.context.result = "How hot will it be? Find out soon!";
-    }
+      var city = cities['Melbourne']; // get lat-lon entry for city
+      if (city) {
+        // Get weather forecast using Dark Sky API. Date is YYYY-MM-DD. All parameters
+        // are string types.
+        forecast
+          .latitude(city.lat.toString())
+          .longitude(city.lon.toString())
+          .units('ca')
+          .language('en')
+          .get()
+          .then(res => {
+            var result = JSON.parse(res);
 
-    callback(returnObject);
+            returnObject.execStatus = "SUCCESS";
+            returnObject.context.result = "It's " + result.currently.summary.
+              toLowerCase() + " and " + round_1dp(result.currently.temperature).
+                toString() + "°C outside.";
+            callback(returnObject);
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      }
+      else {
+        console.log("NOT_FOUND");
+      }
+    }
 }
