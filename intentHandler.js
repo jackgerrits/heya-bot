@@ -56,7 +56,7 @@ function intentHandler() {
     };
 
     this.handleRequest = function(context, entities, callback) {
-        if(head === null){
+        if(head == null){
             callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
             console.log("Handling chain")

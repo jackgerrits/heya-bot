@@ -14,8 +14,6 @@ var greetings = require("./handlers/greetings.js");
 
 intentHandlerClass.registerHandler(greetings);
 
-
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -37,6 +35,7 @@ app.get('/webhook', function (req, res) {
 });
 
 var fbMessage = function(id, text) {
+  console.log(id);
   var body = JSON.stringify({
     recipient: { id },
     message: { text },
