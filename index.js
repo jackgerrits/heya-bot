@@ -114,7 +114,7 @@ var actions = {
 var responses = ["Hey boss 👽", "Yeah man?"];
 
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
-    console.log("most likely" + intentHandlerClass.findMostLikelyEntity(entities, "intent"));
+    console.log("most likely" + intentHandlerClass.firstEntityValue(entities, "intent"));
     if(intentHandlerClass.firstEntityValue(entities, "intent") == "greeting") {
       returnObject.execStatus = "SUCCESS";
       returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
