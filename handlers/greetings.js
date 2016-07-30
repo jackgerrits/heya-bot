@@ -14,10 +14,8 @@ var responses = ["Hey boss 👽", "Yeah?", "What's going on?"];
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    if(registry.firstEntityValue(entities, "intent") == "greeting") {
-        returnObject.execStatus = "SUCCESS";
-        returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
-    }
+    returnObject.execStatus = "SUCCESS";
+    returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
 
     callback(returnObject);
 };

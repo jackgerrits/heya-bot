@@ -1,28 +1,5 @@
-var Handler = function(func){
-    this.func = func;
-    this.next = null;
-}
-
-Handler.prototype = {
-    execute : function(context, entities, callback){
-        this.func(context, entities, function(resultPair){
-            console.log(this.next);
-            if(resultPair.execStatus == "FAILURE" || resultPair.execStatus == "SUCCESS"){
-                callback(resultPair);
-            } else if (this.next == null){
-                callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
-            } else {
-                this.next.execute(context, entities, callback);
-            }
-        });
-    },
-    setNext: function(handler){
-        this.next = handler;
-    }
-}
-
 function intentHandler() {
-    var head = null;
+    var handlers = {};
 
     this.RESULTS = {
         SUCCESS : "SUCCESS",
@@ -44,25 +21,16 @@ function intentHandler() {
     };
 
     // Handler must be a funtion that accepts context and entities
-    this.registerHandler = function(func){
-        if(head == null){
-            head = new Handler(func);
-            console.log("registered head")
-        } else {
-            console.log("registered next node")
-
-            var next = new Handler(func);
-            head.setNext(next);
-            head = next;
-        }
+    this.registerHandler = function(name, func){
+        handlers[name] = func;
     };
 
     this.handleRequest = function(context, entities, callback) {
-        if(head == null){
-            callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
+        var intentName = this.firstEntityValue(entities, "intent");
+        if(intentName && handlers.hasOwnProperty(intentName)){
+            handlers[intentName](context, entities, callback);
         } else {
-            console.log("Handling chain")
-            head.execute(context, entities, callback);
+            callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         }
     };
 

@@ -21,36 +21,32 @@ var pLocation = {
 module.exports = function(context, entities, callback){
   var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-  if(registry.firstEntityValue(entities, "intent") == "pokemon") {
-    goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
-    if (err) throw err;
-      goInstance.GetProfile(function(err, profile) {
+  goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
+  if (err) throw err;
+    goInstance.GetProfile(function(err, profile) {
+      if (err) throw err;
+      goInstance.Heartbeat(function(err,hb) {
         if (err) throw err;
-        goInstance.Heartbeat(function(err,hb) {
-          if (err) throw err;
 
-          var pokemonArray = [];
-          var outputMessage = ["The nearby pokemon are: "];
+        var pokemonArray = [];
+        var outputMessage = ["The nearby pokemon are: "];
 
-          for (var i = hb.cells.length - 1; i >= 0; i--) {
-            if(hb.cells[i].NearbyPokemon[0]) {
-              var pokemonCell = hb.cells[i];
-              for(var j = 0; j < pokemonCell.NearbyPokemon.length; j++) {
-                var pokemon = goInstance.pokemonlist[parseInt(pokemonCell.
-                                         NearbyPokemon[j].PokedexNumber)-1];
-                pokemonArray.push(" " + pokemon.name);
-              }
+        for (var i = hb.cells.length - 1; i >= 0; i--) {
+          if(hb.cells[i].NearbyPokemon[0]) {
+            var pokemonCell = hb.cells[i];
+            for(var j = 0; j < pokemonCell.NearbyPokemon.length; j++) {
+              var pokemon = goInstance.pokemonlist[parseInt(pokemonCell.
+                                       NearbyPokemon[j].PokedexNumber)-1];
+              pokemonArray.push(" " + pokemon.name);
             }
           }
+        }
 
-          returnObject.context.result = "Some nearby pokemon are: " + pokemonArray.join();
-          returnObject.execStatus = "SUCCESS";
+        returnObject.context.result = "Some nearby pokemon are: " + pokemonArray.join();
+        returnObject.execStatus = "SUCCESS";
 
-          callback(returnObject);
-        });
+        callback(returnObject);
       });
     });
-  } else {
-    callback(returnObject);
-  }
+    });
 };
