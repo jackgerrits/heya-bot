@@ -34,7 +34,7 @@ function intentHandler() {
         if(head === null){
             head = new Handler(func);
         } else {
-            let next = new Handler(func);
+            var next = new Handler(func);
             head.setNext(next);
             head = next;
         }
