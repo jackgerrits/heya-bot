@@ -31,7 +31,7 @@ module.exports = function(context, entities, callback){
         if (err) throw err;
 
         var pokemonArray = [];
-        var outputMessage = ["The nearby pokemon are: "];
+        var outputMessage = ["The nearby pokemon are:"];
 
         for (var i = hb.cells.length - 1; i >= 0; i--) {
           if(hb.cells[i].NearbyPokemon[0]) {
@@ -44,7 +44,7 @@ module.exports = function(context, entities, callback){
           }
         }
 
-        returnObject.context.result = "Some nearby pokemon are: " + pokemonArray.join();
+        returnObject.context.result = "Some nearby pokemon are:" + pokemonArray.join();
         returnObject.execStatus = "SUCCESS";
 
         callback(returnObject);
