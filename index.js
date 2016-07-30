@@ -4,7 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var app = express();
-var intentHandler = require("./intentHandler.js");
+var intentHandlerClass = require("./intentHandler.js");
 var Wit = require('node-wit').Wit;
 var log = require('node-wit').log;
 
@@ -79,8 +79,8 @@ var actions = {
     var entities = _ref3.entities;
 
     return new Promise(function (resolve, reject) {
-      var resultPair = intentHandler.handleIntent(context, entities);
-      if (resultPair.result == intentHandler.RESULTS.FAILURE) {
+      var resultPair = intentHandlerClass.handleIntent(context, entities);
+      if (resultPair.result == intentHandlerClass.RESULTS.FAILURE) {
         console.error("There was an error when handling intent: " + entities.intent);
         resultPair.context.result = "No functions handled this question.";
       }
