@@ -184,11 +184,14 @@ app.post('/webhook', function (req, res) {
                             // This depends heavily on the business logic of your bot.
                             // Example:
                             // if (context['done']) {
-                            delete sessions[sessionId].context.result;
+
                             // }
 
                             // Updating the user's current session state
                             sessions[sessionId].context = context;
+
+                            // The message has been sent, so we delete it now.
+                            delete sessions[sessionId].context.result;
                         })
                         .catch((err) => {
                             console.error('Oops! Got an error from Wit: ', err.stack || err);
