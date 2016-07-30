@@ -1,4 +1,5 @@
 var PokemonGO = require('pokemon-go-node-api')
+var registry = require("../intentHandler.js");
 
 var goInstance = new PokemonGO.Pokeio();
 
