@@ -12,9 +12,10 @@ function getRandomInt(min, max) {
 var responses = ["Hey boss 👽", "Yeah man?"];
 
 registry.registerHandler(function(context, entities, callback){
-    var returnObject = {result : this.RESULTS.CANT_HANDLE, context : context};
+    var returnObject = {execStatus : "CANT_HANDLE", context : context};
+
     if(entities.intent == "greeting"){
-        returnObject.result = "SUCCESS";
+        returnObject.execStatus = "SUCCESS";
         returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
     }
 

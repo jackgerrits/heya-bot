@@ -100,9 +100,10 @@ var actions = {
   handleIntent: function({context, entities}) {
     return new Promise(function (resolve, reject) {
       var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
-          if (resultPair.result == intentHandlerClass.RESULTS.CANT_HANDLE) {
+          if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
             console.error("There was an error when handling intent: " + entities.intent);
             resultPair.context.result = "No functions handled this question.";
+
           }
 
           console.log(resultPair);

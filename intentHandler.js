@@ -6,10 +6,10 @@ var Handler = function(func){
 Handler.prototype = {
     execute : function(context, entities, callback){
         func(context, entities, function(resultPair){
-            if(resultPair.result == "FAILURE" || resultPair.result == "SUCCESS"){
+            if(resultPair.execStatus == "FAILURE" || resultPair.execStatus == "SUCCESS"){
                 callback(resultPair);
             } else if (this.next === null){
-                callback({result : this.RESULTS.CANT_HANDLE, context : context});
+                callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
             } else {
                 this.next.execute(context, entities, callback);
             }
@@ -41,8 +41,11 @@ function intentHandler() {
     }
 
     this.handleRequest = function(context, entities, callback) {
+        console.log(context);
+        console.log(entities);
+
         if(head === null){
-            callback({result : this.RESULTS.CANT_HANDLE, context : context});
+            callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
             head.execute(context, entities, callback);
         }
@@ -50,17 +53,6 @@ function intentHandler() {
 
     return this;
 }
-
-// entities.intent == "pokemon"
-
-// var exampleResObj {
-//     context : originalContextParameterThatWasPassedInWithTheResultsChangedInTheObject,
-//     result: "SUCCESS"/"FAILURE"/"CANT_HANDLE"
-// }
-// /*
-//     the handler must return an object of the above format
-
-// */
 
 // Holds an instantiated intentHandler to be used by the app
 module.exports = intentHandler();
