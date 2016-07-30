@@ -1,5 +1,3 @@
-'use strict';
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
@@ -10,10 +8,10 @@ var log = require('node-wit').log;
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.listen((process.env.PORT || 3000));
+
 
 // Wit.ai parameters
-const WIT_TOKEN = process.env.WIT_TOKEN;
+var WIT_TOKEN = process.env.WIT_TOKEN;
 
 // Server frontpage
 app.get('/', function (req, res) {
@@ -32,12 +30,12 @@ app.get('/webhook', function (req, res) {
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
-const sessions = {};
+var sessions = {};
 
-const findOrCreateSession = (fbid) => {
+var findOrCreateSession = function(fbid) {
   let sessionId;
   // Let's see if we already have a session for the user fbid
-  Object.keys(sessions).forEach(k => {
+  Object.keys(sessions).forEach(function(k){
     if (sessions[k].fbid === fbid) {
       // Yep, got it!
       sessionId = k;
@@ -52,11 +50,11 @@ const findOrCreateSession = (fbid) => {
 };
 
 // Our bot actions
-const actions = {
-  send({sessionId}, {text}) {
+var actions = {
+  send(sessionId, text) {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = sessions[sessionId].fbid;
+    var recipientId = sessions[sessionId].fbid;
     if (recipientId) {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
@@ -90,7 +88,7 @@ const actions = {
 };
 
 // Setting up our bot
-const wit = new Wit({
+var wit = new Wit({
   accessToken: WIT_TOKEN,
   actions,
   logger: new log.Logger(log.INFO)
@@ -120,22 +118,22 @@ app.post('/webhook', function (req, res) {
     // Parse the Messenger payload
   // See the Webhook reference
   // https://developers.facebook.com/docs/messenger-platform/webhook-reference
-  const data = req.body;
+  var data = req.body;
 
   if (data.object === 'page') {
-    data.entry.forEach(entry => {
-      entry.messaging.forEach(event => {
+    data.entry.forEach(function(entry) {
+      entry.messaging.forEach(function(event) {
         if (event.message) {
           // Yay! We got a new message!
           // We retrieve the Facebook user ID of the sender
-          const sender = event.sender.id;
+          var sender = event.sender.id;
 
           // We retrieve the user's current session, or create one if it doesn't exist
           // This is needed for our bot to figure out the conversation history
-          const sessionId = findOrCreateSession(sender);
+          var sessionId = findOrCreateSession(sender);
 
           // We retrieve the message content
-          const {text, attachments} = event.message;
+          var {text, attachments} = event.message;
 
           if (attachments) {
             // We received an attachment
@@ -180,3 +178,4 @@ app.post('/webhook', function (req, res) {
 });
 
 
+app.listen((process.env.PORT || 3000));
