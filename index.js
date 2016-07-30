@@ -28,6 +28,25 @@ app.get('/webhook', function (req, res) {
   }
 });
 
+// generic function sending messages
+function sendMessage(recipientId, message) {
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+    method: 'POST',
+    json: {
+      recipient: { id: recipientId },
+      message: message
+    }
+  }, function (error, response, body) {
+    if (error) {
+      console.log('Error sending message: ', error);
+    } else if (response.body.error) {
+      console.log('Error: ', response.body.error);
+    }
+  });
+};
+
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
@@ -63,7 +82,14 @@ var actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return sendMessage(recipientId, text);
+      return new Promise(function(resolve, reject){
+        sendMessage(recipientId, text);
+        resolve("Sucess");
+      }).then(function () {
+        return null;
+      }).catch(function (err) {
+        console.error('Oops! An error occurred while forwarding the response to', recipientId, ':', err.stack || err);
+      });
     } else {
       console.error('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
@@ -92,25 +118,6 @@ var wit = new Wit({
   actions: actions,
   logger: new log.Logger(log.INFO)
 });
-
-// generic function sending messages
-function sendMessage(recipientId, message) {
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
-    method: 'POST',
-    json: {
-      recipient: { id: recipientId },
-      message: message
-    }
-  }, function (error, response, body) {
-    if (error) {
-      console.log('Error sending message: ', error);
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error);
-    }
-  });
-};
 
 // handler receiving messages
 app.post('/webhook', function (req, res) {
