@@ -19,6 +19,19 @@ intentHandlerClass.registerHandler("pokemon", pokemon);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var errorMessages = ["I don't know what to do with that",
+  "I bet Siri doesn't understand either",
+  "Ask me later, I must learn more",
+  "Sorry, I've got no idea what you just said",
+  "I'm only young",
+  "My creators didn't have the foresight to teach me that",
+  "Not my fault, blame Ben, his crazy API calls and nested callbacks to the heat death of the universe"]
+
 // Wit.ai parameters
 var WIT_TOKEN = process.env.WIT_TOKEN;
 
@@ -107,17 +120,12 @@ var actions = {
   },
   handleIntent: function({context, entities}) {
     return new Promise(function (resolve, reject) {
-      console.log(context);
-      console.log(entities);
 
       var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
           if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
-
-            console.error("There was an error when handling intent: " + entities.intent);
-            resultPair.context.result = "No functions handled this question.";
+            resultPair.context.result = errorMessages[getRandomInt(0, errorMessages.length - 1)];
           }
 
-          console.log(resultPair);
           resolve(resultPair.context);
       });
     });
@@ -151,7 +159,6 @@ app.post('/webhook', function (req, res) {
 
           // We retrieve the message content
           const {text, attachments} = event.message;
-          console.log(text);
 
           if (attachments) {
             // We received an attachment
