@@ -29,7 +29,10 @@ module.exports = function(context, entities, callback){
     var soon = moment(reminderTime);
     var secondsDiff = soon.diff(now, 'seconds');
 
-    console.log(secondsDiff);
+    console.log(context);
+
+    // setTimeout(reminder(, 1000)
+
 
     returnObject.execStatus = "SUCCESS";
     returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
