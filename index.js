@@ -107,6 +107,11 @@ var actions = {
     console.log(context);
     console.log(entities);
 
+    function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var responses = ["Hey boss 👽", "Yeah man?"];
 
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
     console.log("most likely" + intentHandlerClass.findMostLikelyEntity(entities, "intent"));
