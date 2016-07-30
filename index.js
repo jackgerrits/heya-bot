@@ -15,12 +15,14 @@ var greetings = require("./handlers/greetings.js");
 var pokemon = require("./handlers/pokego.js");
 var weather = require("./handlers/weather.js");
 var reminder = require("./handlers/reminder.js");
+var joke = require("./handlers/joke.js");
 
 intentHandlerClass.registerHandler("greeting", greetings);
 intentHandlerClass.registerHandler("pokemon", pokemon);
 intentHandlerClass.registerHandler("weather_temperature", weather.weather_temperature);
 intentHandlerClass.registerHandler("weather_rain", weather.weather_rain);
 intentHandlerClass.registerHandler("reminder", reminder);
+intentHandlerClass.registerHandler("joke", joke);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
