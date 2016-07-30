@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel": "^6.5.2",
+    "babel-cli": "^6.11.4",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "node-wit": "^4.0.0",
