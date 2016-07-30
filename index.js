@@ -6,7 +6,8 @@ var request = require('request');
 var app = express();
 var Wit = require('node-wit').Wit;
 var log = require('node-wit').log;
-var fetch = require('node-fetch');
+var fbMessage = require('./fbMessage.js');
+
 
 // Register intent handlers!
 var intentHandlerClass = require("./intentHandler.js");
@@ -51,27 +52,6 @@ app.get('/webhook', function (req, res) {
     }
 });
 
-var fbMessage = function(id, text) {
-    console.log(id);
-    var body = JSON.stringify({
-        recipient: { id },
-        message: { text },
-    });
-    var qs = 'access_token=' + encodeURIComponent(process.env.PAGE_ACCESS_TOKEN);
-    return fetch('https://graph.facebook.com/me/messages?' + qs, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body,
-    })
-    .then(function(rsp) {return rsp.json()})
-    .then(function(json) {
-        if (json.error && json.error.message) {
-            throw new Error(json.error.message);
-        }
-        return json;
-    });
-};
-
 // This will contain all user sessions.
 // Each session has an entry:
 // sessionId -> {fbid: facebookUserId, context: sessionState}
@@ -89,7 +69,7 @@ var findOrCreateSession = function(fbid) {
     if (!sessionId) {
         // No session found for user fbid, let's create a new one
         sessionId = new Date().toISOString();
-        sessions[sessionId] = { fbid: fbid, context: {} };
+        sessions[sessionId] = { fbid: fbid, context: { fbid : fbid } };
     }
     return sessionId;
 };
