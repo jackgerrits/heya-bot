@@ -190,7 +190,7 @@ app.post('/webhook', function (req, res) {
           }
         } else {
           // usually read receipt, ignore for now
-          // console.log('received event', JSON.stringify(event));
+          console.log('received event', JSON.stringify(event));
         }
       });
     });
