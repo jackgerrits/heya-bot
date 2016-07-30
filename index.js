@@ -73,10 +73,7 @@ var findOrCreateSession = function(fbid) {
 
 // Our bot actions
 var actions = {
-  send: function send(_ref, _ref2) {
-    var sessionId = _ref.sessionId;
-    var text = _ref2.text;
-
+  send: function({sessionId}, {text}) {
     // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
     var recipientId = sessions[sessionId].fbid;
@@ -100,18 +97,21 @@ var actions = {
       return Promise.resolve();
     }
   },
-  handleIntent: function handleIntent({context, entities}) {
-    // var context = _ref3.context;
-    // var entities = _ref3.entities;
-
+  handleIntent: function({context, entities}) {
     return new Promise(function (resolve, reject) {
-      var resultPair = intentHandlerClass.handleRequest(context, entities);
-      if (resultPair.result == intentHandlerClass.RESULTS.CANT_HANDLE) {
-        console.error("There was an error when handling intent: " + entities.intent);
-        resultPair.context.result = "No functions handled this question.";
-      }
-      console.log(resultPair);
-      return resolve(resultPair.context);
+      var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
+          if (resultPair.result == intentHandlerClass.RESULTS.CANT_HANDLE) {
+            console.error("There was an error when handling intent: " + entities.intent);
+            resultPair.context.result = "No functions handled this question.";
+          }
+
+          console.log(resultPair);
+          resolve(resultPair.context);
+      });
+
+
+      // return resolve(resultPair.context);
+
     });
   }
 };

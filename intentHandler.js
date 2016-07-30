@@ -1,5 +1,27 @@
+var Handler = function(func){
+    this.func = func;
+    this.next = null;
+}
+
+Handler.prototype = {
+    execute : function(context, entities, callback){
+        func(context, entities, function(resultPair){
+            if(resultPair.result == "FAILURE" || resultPair.result == "SUCCESS"){
+                callback(resultPair);
+            } else if (this.next === null){
+                callback({result : this.RESULTS.CANT_HANDLE, context : context});
+            } else {
+                this.next.execute(context, entities, callback);
+            }
+        });
+    },
+    setNext: function(handler){
+        this.next = handler;
+    }
+}
+
 function intentHandler() {
-    var handlers = [];
+    var head = null;
 
     this.RESULTS = {
         SUCCESS : "SUCCESS",
@@ -8,23 +30,22 @@ function intentHandler() {
     }
 
     // Handler must be a funtion that accepts context and entities
-    this.registerHandler = function(handler){
-        handlers.push(handler);
+    this.registerHandler = function(func){
+        if(head === null){
+            head = new Handler(func);
+        } else {
+            let next = new Handler(func);
+            head.setNext(next);
+            head = next;
+        }
     }
 
-    this.handleRequest = function(context, entities) {
-        var result = this.RESULTS.CANT_HANDLE;
-        console.log(context);
-        console.log(entities);
-
-        for(var i = 0; i < handlers.length; ++i){
-            result = handlers[i](context, entities);
-            if(result == this.RESULTS.FAILURE || result == this.RESULTS.SUCCESS){
-                return result;
-            }
+    this.handleRequest = function(context, entities, callback) {
+        if(head === null){
+            callback({result : this.RESULTS.CANT_HANDLE, context : context});
+        } else {
+            head.execute(context, entities, callback);
         }
-        // If this location is reached, there is no handler for this query
-        return this.RESULTS.CANT_HANDLE;
     }
 
     return this;
