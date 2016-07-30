@@ -1,7 +1,7 @@
 var registry = require("../intentHandler.js");
 
 var ForecastIO = require('forecast-io');
-var forecast = new ForecastIO('***REMOVED***');
+var forecast = new ForecastIO(process.env.DARK_SKY_KEY);
 
 var cities = require("../cities.json");
 
