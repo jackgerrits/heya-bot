@@ -11,7 +11,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var responses = ["I'll remind you!", "Leave it with me"];
+var responses = ["I'll remind you!", "Leave it with me", "I got you"];
 
 function reminder(id, message){
     return function(){
@@ -24,6 +24,14 @@ module.exports = function(context, entities, callback){
 
     var reminderTime = registry.firstEntityValue(entities, "datetime");
     var reminderString = registry.firstEntityValue(entities, "reminder");
+
+    // If it was omitted from the request, use a default message.
+    if(!reminderString) {
+        reminderString = "Reminding you!";
+    } else {
+        reminderString = "Don't forget to" + reminderString;
+    }
+
 
     var now = moment();
     var soon = moment(reminderTime);
