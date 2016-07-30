@@ -11,7 +11,7 @@ function getRandomInt(min, max) {
 
 var responses = ["Hey boss 👽", "Yeah man?"];
 
-registry.registerHandler(function(context, entities, callback){
+module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
     console.log("most likely" + registry.findMostLikelyEntity(entities, "intent"));
     if(registry.findMostLikelyEntity(entities, "intent") == "greeting") {
@@ -21,4 +21,4 @@ registry.registerHandler(function(context, entities, callback){
     }
 
     callback(returnObject);
-});
+;}

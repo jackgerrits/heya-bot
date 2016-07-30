@@ -4,10 +4,15 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var request = require('request');
 var app = express();
-var intentHandlerClass = require("./intentHandler.js");
 var Wit = require('node-wit').Wit;
 var log = require('node-wit').log;
 var fetch = require('node-fetch');
+
+// Register intent handlers!
+var intentHandlerClass = require("./intentHandler.js");
+var greetings = require("./handlers/greetings.js");
+
+intentHandlerClass.registerHandler(greetings);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

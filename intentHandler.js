@@ -20,7 +20,6 @@ Handler.prototype = {
     }
 }
 
-
 function intentHandler() {
     var head = null;
 
