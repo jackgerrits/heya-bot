@@ -11,8 +11,10 @@ var fetch = require('node-fetch');
 // Register intent handlers!
 var intentHandlerClass = require("./intentHandler.js");
 var greetings = require("./handlers/greetings.js");
+var pokemon = require("./handlers/pokego.js");
 
 intentHandlerClass.registerHandler(greetings);
+intentHandlerClass.registerHandler(pokemon);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -118,9 +120,6 @@ var actions = {
           console.log(resultPair);
           resolve(resultPair.context);
       });
-
-
-      // return resolve(resultPair.context);
     });
   }
 };
@@ -182,7 +181,7 @@ app.post('/webhook', function (req, res) {
               // }
 
               // Updating the user's current session state
-              sessions[sessionId].context = context;
+              // sessions[sessionId].context = context;
             })
             .catch((err) => {
               console.error('Oops! Got an error from Wit: ', err.stack || err);
