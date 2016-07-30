@@ -22,7 +22,7 @@ module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
     goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
-    if (err) throw err;
+        if (err) throw err;
         goInstance.GetProfile(function(err, profile) {
             if (err) throw err;
 
