@@ -14,6 +14,8 @@ var greetings = require("./handlers/greetings.js");
 
 intentHandlerClass.registerHandler(greetings);
 
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

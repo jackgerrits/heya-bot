@@ -16,6 +16,7 @@ module.exports = function(context, entities, callback){
 
     console.log("most likely" + registry.findMostLikelyEntity(entities, "intent"));
     if(registry.firstEntityValue(entities, "intent") == "greeting") {
+        console.log("Greeting is handling");
         returnObject.execStatus = "SUCCESS";
         returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
     }

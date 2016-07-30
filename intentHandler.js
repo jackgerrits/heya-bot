@@ -5,7 +5,7 @@ var Handler = function(func){
 
 Handler.prototype = {
     execute : function(context, entities, callback){
-        func(context, entities, function(resultPair){
+        this.func(context, entities, function(resultPair){
             if(resultPair.execStatus == "FAILURE" || resultPair.execStatus == "SUCCESS"){
                 callback(resultPair);
             } else if (this.next === null){
@@ -46,6 +46,7 @@ function intentHandler() {
     this.registerHandler = function(func){
         if(head === null){
             head = new Handler(func);
+            console.log("registered head")
         } else {
             var next = new Handler(func);
             head.setNext(next);
@@ -53,12 +54,11 @@ function intentHandler() {
         }
     };
 
-
-
     this.handleRequest = function(context, entities, callback) {
         if(head === null){
             callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
+            console.log("Handling chain")
             console.log(context);
             console.log(entities);
             console.log(callback);
