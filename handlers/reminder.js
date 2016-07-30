@@ -27,7 +27,7 @@ module.exports = function(context, entities, callback){
 
     var now = moment();
     var soon = moment(reminderTime);
-    var secondsDiff = endDate.diff(startDate, 'seconds');
+    var secondsDiff = soon.diff(now, 'seconds');
 
     console.log(secondsDiff);
 
