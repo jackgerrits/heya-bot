@@ -40,4 +40,4 @@ function intentHandler() {
 // */
 
 // Holds an instantiated intentHandler to be used by the app
-module.exports.intentHandler = intentHandler();
+module.exports = intentHandler();
