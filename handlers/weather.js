@@ -1,3 +1,5 @@
+'use strict';
+
 var registry = require("../intentHandler.js");
 
 const ForecastIO = require('forecast-io');
