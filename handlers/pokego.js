@@ -2,8 +2,8 @@ var PokemonGO = require('pokemon-go-node-api')
 
 var goInstance = new PokemonGO.Pokeio();
 
-var pUsername = '***REMOVED***' 
-var pPassword = '***REMOVED***'
+var pUsername = process.env.POKE_USER
+var pPassword = process.env.POKE_PASS
 var pLat = -37.8003569
 var pLong = 144.963433
 var pElev = 18.25
@@ -20,7 +20,7 @@ var pLocation = {
 module.exports = function(context, entities, callback){
   var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-  if(registry.firstEntityValue(entities, "intent") == "greeting") {
+  if(registry.firstEntityValue(entities, "intent") == "pokemon") {
     goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
     if (err) throw err;
       goInstance.GetProfile(function(err, profile) {
