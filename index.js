@@ -104,44 +104,22 @@ var actions = {
   },
   handleIntent: function({context, entities}) {
     return new Promise(function (resolve, reject) {
-    console.log(context);
-    console.log(entities);
+      console.log(context);
+      console.log(entities);
 
-    function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+      var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
+          if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
 
-var responses = ["Hey boss 👽", "Yeah man?"];
+            console.error("There was an error when handling intent: " + entities.intent);
+            resultPair.context.result = "No functions handled this question.";
+          }
 
-    var returnObject = {execStatus : "CANT_HANDLE", context : context};
-    console.log("most likely" + intentHandlerClass.firstEntityValue(entities, "intent"));
-    if(intentHandlerClass.firstEntityValue(entities, "intent") == "greeting") {
-      returnObject.execStatus = "SUCCESS";
-      returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
-    }
-      // var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
-      //     if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
-      //       console.error("There was an error when handling intent: " + entities.intent);
-      //       resultPair.context.result = "No functions handled this question.";
-      //     }
-
-      //     console.log(resultPair);
-      //     resolve(resultPair.context);
-      // });
-
-
-    function getStuffAsync(param){
-      return new Promise(function(resolve,reject){
-         getStuff(param,function(err,data){
-             if(err !== null) return reject(err);
-             resolve(data);
-         });
+          console.log(resultPair);
+          resolve(resultPair.context);
       });
-    }
 
 
-      return resolve(returnObject.context);
-
+      // return resolve(resultPair.context);
     });
   }
 };

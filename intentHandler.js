@@ -53,10 +53,15 @@ function intentHandler() {
         }
     };
 
+
+
     this.handleRequest = function(context, entities, callback) {
         if(head === null){
             callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
+            console.log(context);
+            console.log(entities);
+            console.log(callback);
             head.execute(context, entities, callback);
         }
     };
