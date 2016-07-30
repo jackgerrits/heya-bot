@@ -25,15 +25,10 @@ module.exports = function(context, entities, callback){
   if (err) throw err;
     goInstance.GetProfile(function(err, profile) {
       if (err) throw err;
-      goInstance.Heartbeat(function(err,hb) {
-        if(err) {
-          console.log(err);
-          if(err === "No result") {
-              clearInterval(start);
-              init();
-          }
-          return;
-        }
+
+      function doTheThing(){
+              goInstance.Heartbeat(function(err,hb) {
+        if (err) throw err;
 
         var pokemonArray = [];
         var outputMessage = ["The nearby pokemon are: "];
@@ -54,6 +49,8 @@ module.exports = function(context, entities, callback){
 
         callback(returnObject);
       });
+      }
+      setTimeout(doTheThing, 3000);
     });
     });
 };
