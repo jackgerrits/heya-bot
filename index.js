@@ -7,6 +7,7 @@ var app = express();
 var intentHandlerClass = require("./intentHandler.js");
 var Wit = require('node-wit').Wit;
 var log = require('node-wit').log;
+var fetch = require('node-fetch');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,22 +29,23 @@ app.get('/webhook', function (req, res) {
   }
 });
 
-// generic function sending messages
-function sendMessage(recipientId, message) {
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+var fbMessage = function(id, text) {
+  var body = JSON.stringify({
+    recipient: { id },
+    message: { text },
+  });
+  var qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
+  return fetch('https://graph.facebook.com/me/messages?' + qs, {
     method: 'POST',
-    json: {
-      recipient: { id: recipientId },
-      message: message
+    headers: {'Content-Type': 'application/json'},
+    body,
+  })
+  .then(function(rsp) {return rsp.json()})
+  .then(function(json) {
+    if (json.error && json.error.message) {
+      throw new Error(json.error.message);
     }
-  }, function (error, response, body) {
-    if (error) {
-      console.log('Error sending message: ', error);
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error);
-    }
+    return json;
   });
 };
 
@@ -82,14 +84,16 @@ var actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return new Promise(function(resolve, reject){
-        sendMessage(recipientId, text);
-        resolve("Sucess");
-      }).then(function () {
-        return null;
-      }).catch(function (err) {
-        console.error('Oops! An error occurred while forwarding the response to', recipientId, ':', err.stack || err);
-      });
+      return fbMessage(recipientId, text)
+      .then(() => null)
+      .catch((err) => {
+        console.error(
+          'Oops! An error occurred while forwarding the response to',
+          recipientId,
+          ':',
+          err.stack || err
+        );
+    });
     } else {
       console.error('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
@@ -147,7 +151,8 @@ app.post('/webhook', function (req, res) {
           if (attachments) {
             // We received an attachment
             // Let's reply with an automatic message
-            sendMessage(sender, 'Sorry I can only process text messages for now.').catch(console.error);
+            fbMessage(sender, 'Sorry I can only process text messages for now.')
+            .catch(console.error);
           } else if (text) {
             // We received a text message
 
