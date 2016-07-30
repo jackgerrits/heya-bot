@@ -105,7 +105,6 @@ var actions = {
           if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
             console.error("There was an error when handling intent: " + entities.intent);
             resultPair.context.result = "No functions handled this question.";
-
           }
 
           console.log(resultPair);
@@ -147,6 +146,7 @@ app.post('/webhook', function (req, res) {
 
           // We retrieve the message content
           const {text, attachments} = event.message;
+          console.log(text);
 
           if (attachments) {
             // We received an attachment
