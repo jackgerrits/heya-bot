@@ -45,10 +45,12 @@ function intentHandler() {
 
     // Handler must be a funtion that accepts context and entities
     this.registerHandler = function(func){
-        if(head === null){
+        if(head == null){
             head = new Handler(func);
             console.log("registered head")
         } else {
+            console.log("registered next node")
+
             var next = new Handler(func);
             head.setNext(next);
             head = next;
@@ -60,9 +62,6 @@ function intentHandler() {
             callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
             console.log("Handling chain")
-            console.log(context);
-            console.log(entities);
-            console.log(callback);
             head.execute(context, entities, callback);
         }
     };
