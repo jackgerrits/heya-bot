@@ -118,9 +118,6 @@ var actions = {
           console.log(resultPair);
           resolve(resultPair.context);
       });
-
-
-      // return resolve(resultPair.context);
     });
   }
 };

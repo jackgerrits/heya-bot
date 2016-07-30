@@ -15,6 +15,7 @@
     "express": "^4.14.0",
     "node-fetch": "^1.5.3",
     "node-wit": "^4.0.0",
+    "pokemon-go-node-api": "^1.4.0",
     "request": "^2.74.0"
   }
 }
