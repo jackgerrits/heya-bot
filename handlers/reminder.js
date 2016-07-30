@@ -22,8 +22,9 @@ function reminder(id, message){
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    var reminderTime = context.datetime;
-    var reminderString = context.reminder;
+    console.log(entities);
+    var reminderTime = entities.datetime;
+    var reminderString = entities.reminder;
 
     console.log(reminderTime);
     console.log(reminderString);
