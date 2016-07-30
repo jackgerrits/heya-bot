@@ -22,12 +22,14 @@ function reminder(id, message){
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    console.log(entities);
-    var reminderTime = entities.datetime;
-    var reminderString = entities.reminder;
+    var reminderTime = registry.firstEntityValue(entities, "datetime");
+    var reminderString = registry.firstEntityValue(entities, "reminder");
 
-    console.log(reminderTime);
-    console.log(reminderString);
+    var now = moment();
+    var soon = moment(reminderTime);
+    var secondsDiff = endDate.diff(startDate, 'seconds');
+
+    console.log(secondsDiff);
 
     returnObject.execStatus = "SUCCESS";
     returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
