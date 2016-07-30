@@ -34,7 +34,7 @@ var fbMessage = function(id, text) {
     recipient: { id },
     message: { text },
   });
-  var qs = 'access_token=' + encodeURIComponent(FB_PAGE_TOKEN);
+  var qs = 'access_token=' + encodeURIComponent(process.env.PAGE_ACCESS_TOKEN);
   return fetch('https://graph.facebook.com/me/messages?' + qs, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
