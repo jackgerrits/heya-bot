@@ -98,6 +98,9 @@ var actions = {
     }
   },
   handleIntent: function({context, entities}) {
+    console.log(context);
+    console.log(entities);
+
     return new Promise(function (resolve, reject) {
       var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
           if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
@@ -156,7 +159,7 @@ app.post('/webhook', function (req, res) {
             .catch(console.error);
           } else if (text) {
             // We received a text message
-
+            console.log(text);
             // Let's forward the message to the Wit.ai Bot Engine
             // This will run all actions until our bot has nothing left to do
             wit.runActions(sessionId, // the user's current session

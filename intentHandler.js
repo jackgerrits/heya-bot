@@ -41,9 +41,6 @@ function intentHandler() {
     }
 
     this.handleRequest = function(context, entities, callback) {
-        console.log(context);
-        console.log(entities);
-
         if(head === null){
             callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
         } else {
