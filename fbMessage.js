@@ -1,8 +1,8 @@
 var fetch = require('node-fetch');
 
-var fbMessage = function(recipientId, text) {
+var fbMessage = function(id, text) {
     var body = JSON.stringify({
-        recipient: { recipientId },
+        recipient: { id },
         message: { text },
     });
     var qs = 'access_token=' + encodeURIComponent(process.env.PAGE_ACCESS_TOKEN);
