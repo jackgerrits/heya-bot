@@ -115,7 +115,7 @@ var responses = ["Hey boss 👽", "Yeah man?"];
 
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
     console.log("most likely" + intentHandlerClass.findMostLikelyEntity(entities, "intent"));
-    if(intentHandlerClass.findMostLikelyEntity(entities, "intent") == "greeting") {
+    if(intentHandlerClass.firstEntityValue(entities, "intent") == "greeting") {
       returnObject.execStatus = "SUCCESS";
       returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
     }
@@ -128,6 +128,16 @@ var responses = ["Hey boss 👽", "Yeah man?"];
       //     console.log(resultPair);
       //     resolve(resultPair.context);
       // });
+
+
+    function getStuffAsync(param){
+      return new Promise(function(resolve,reject){
+         getStuff(param,function(err,data){
+             if(err !== null) return reject(err);
+             resolve(data);
+         });
+      });
+    }
 
 
       return resolve(returnObject.context);

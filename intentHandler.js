@@ -30,19 +30,16 @@ function intentHandler() {
     };
 
     // { intent: [ { confidence: 0.9688451558848296, value: 'greeting' } ] }
-    this.findMostLikelyEntity = function(entities, name){
-        var possibilities = entities[name];
-        var bestConfidence = 0;
-        var bestValue = "";
-
-        for(var i = 0; i < possibilities.length; i++){
-            if(possibilities[i].confidence > bestConfidence){
-                bestConfidence = possibilities[i].confidence;
-                bestValue = possibilities[i].value;
-            }
-        }
-
-        return bestValue;
+    this.firstEntityValue = function(entities, entity) {
+      var val = entities && entities[entity] &&
+        Array.isArray(entities[entity]) &&
+        entities[entity].length > 0 &&
+        entities[entity][0].value
+      ;
+      if (!val) {
+        return null;
+      }
+      return typeof val === 'object' ? val.value : val;
     };
 
     // Handler must be a funtion that accepts context and entities
