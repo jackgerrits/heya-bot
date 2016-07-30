@@ -11,7 +11,7 @@ var fetch = require('node-fetch');
 // Register intent handlers!
 var intentHandlerClass = require("./intentHandler.js");
 var greetings = require("./handlers/greetings.js");
-var pokemon = require("./handlers/pokego.js"});
+var pokemon = require("./handlers/pokego.js");
 
 intentHandlerClass.registerHandler(greetings);
 intentHandlerClass.registerHandler(pokemon);
