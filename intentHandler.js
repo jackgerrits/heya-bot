@@ -9,15 +9,14 @@ function intentHandler() {
 
     // { intent: [ { confidence: 0.9688451558848296, value: 'greeting' } ] }
     this.firstEntityValue = function(entities, entity) {
-      var val = entities && entities[entity] &&
-        Array.isArray(entities[entity]) &&
-        entities[entity].length > 0 &&
-        entities[entity][0].value
-      ;
-      if (!val) {
-        return null;
-      }
-      return typeof val === 'object' ? val.value : val;
+        var val = entities && entities[entity] &&
+            Array.isArray(entities[entity]) &&
+            entities[entity].length > 0 &&
+            entities[entity][0].value;
+        if (!val) {
+              return null;
+        }
+        return typeof val === 'object' ? val.value : val;
     };
 
     // Handler must be a funtion that accepts context and entities
