@@ -28,5 +28,16 @@ function intentHandler() {
     return this;
 }
 
+// entities.intent == "pokemon"
+
+// var exampleResObj {
+//     context : originalContextParameterThatWasPassedInWithTheResultsChangedInTheObject,
+//     result: "SUCCESS"/"FAILURE"/"CANT_HANDLE"
+// }
+// /*
+//     the handler must return an object of the above format
+
+// */
+
 // Holds an instantiated intentHandler to be used by the app
 module.exports.intentHandler = intentHandler();
