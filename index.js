@@ -12,9 +12,12 @@ var fetch = require('node-fetch');
 var intentHandlerClass = require("./intentHandler.js");
 var greetings = require("./handlers/greetings.js");
 var pokemon = require("./handlers/pokego.js");
+var weather = require("./handlers/weather.js");
 
 intentHandlerClass.registerHandler("greeting", greetings);
 intentHandlerClass.registerHandler("pokemon", pokemon);
+intentHandlerClass.registerHandler("weather_temperature", weather.weather_temperature);
+intentHandlerClass.registerHandler("weather_rain", weather.weather_rain);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
