@@ -106,18 +106,26 @@ var actions = {
     return new Promise(function (resolve, reject) {
     console.log(context);
     console.log(entities);
-      var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
-          if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
-            console.error("There was an error when handling intent: " + entities.intent);
-            resultPair.context.result = "No functions handled this question.";
-          }
-
-          console.log(resultPair);
-          resolve(resultPair.context);
-      });
 
 
-      // return resolve(resultPair.context);
+    var returnObject = {execStatus : "CANT_HANDLE", context : context};
+    console.log("most likely" + intentHandlerClass.findMostLikelyEntity(entities, "intent"));
+    if(intentHandlerClass.findMostLikelyEntity(entities, "intent") == "greeting") {
+      returnObject.execStatus = "SUCCESS";
+      returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
+    }
+      // var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
+      //     if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
+      //       console.error("There was an error when handling intent: " + entities.intent);
+      //       resultPair.context.result = "No functions handled this question.";
+      //     }
+
+      //     console.log(resultPair);
+      //     resolve(resultPair.context);
+      // });
+
+
+      return resolve(returnObject.context);
 
     });
   }
