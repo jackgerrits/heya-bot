@@ -82,6 +82,7 @@ const actions = {
       var resultPair = intentHandler.handleIntent(context, entities);
       if(resultPair.result == intentHandler.RESULTS.FAILURE){
         console.error("There was an error when handling intent: " + entities.intent);
+        resultPair.context.result = "No functions handled this question.";
       }
       return resolve(resultPair.context);
     });
