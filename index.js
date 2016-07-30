@@ -33,7 +33,7 @@ app.get('/webhook', function (req, res) {
 var sessions = {};
 
 var findOrCreateSession = function(fbid) {
-  let sessionId;
+  var sessionId;
   // Let's see if we already have a session for the user fbid
   Object.keys(sessions).forEach(function(k){
     if (sessions[k].fbid === fbid) {
