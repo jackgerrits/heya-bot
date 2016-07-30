@@ -178,7 +178,7 @@ app.post('/webhook', function (req, res) {
               // This depends heavily on the business logic of your bot.
               // Example:
               // if (context['done']) {
-              //   delete sessions[sessionId];
+                delete sessions[sessionId];
               // }
 
               // Updating the user's current session state
@@ -190,7 +190,7 @@ app.post('/webhook', function (req, res) {
           }
         } else {
           // usually read receipt, ignore for now
-          // console.log('received event', JSON.stringify(event));
+          console.log('received event', JSON.stringify(event));
         }
       });
     });

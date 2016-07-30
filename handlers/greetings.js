@@ -9,17 +9,15 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var responses = ["Hey boss 👽", "Yeah man?"];
+var responses = ["Hey boss 👽", "Yeah?", "What's going on?"];
 
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    console.log("most likely" + registry.firstEntityValue(entities, "intent"));
-    if (registry.firstEntityValue(entities, "intent") == "greeting") {
-        console.log("Greeting is handling");
+    if(registry.firstEntityValue(entities, "intent") == "greeting") {
         returnObject.execStatus = "SUCCESS";
         returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
     }
 
     callback(returnObject);
-;}
+};

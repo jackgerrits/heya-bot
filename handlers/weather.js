@@ -23,7 +23,6 @@ forecast
 module.exports = function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    console.log("most likely" + registry.findMostLikelyEntity(entities, "intent"));
     if (registry.firstEntityValue(entities, "intent") == "weather_rain") {
         returnObject.execStatus = "SUCCESS";
         returnObject.context.result = "Will it rain? Find out soon!";
