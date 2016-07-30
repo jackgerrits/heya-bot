@@ -102,7 +102,7 @@ var actions = {
 
     return new Promise(function (resolve, reject) {
       var resultPair = intentHandlerClass.handleRequest(context, entities);
-      if (resultPair.result == intentHandlerClass.RESULTS.FAILURE) {
+      if (resultPair.result == intentHandlerClass.RESULTS.CANT_HANDLE) {
         console.error("There was an error when handling intent: " + entities.intent);
         resultPair.context.result = "No functions handled this question.";
       }
