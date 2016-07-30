@@ -10,47 +10,49 @@ var pLong = 144.963433
 var pElev = 18.25
 
 var pLocation = {
-  type: 'coords',
-  coords: {
-    latitude: pLat,
-    longitude: pLong,
-    altitude: pElev
-  }
+    type: 'coords',
+    coords: {
+        latitude: pLat,
+        longitude: pLong,
+        altitude: pElev
+    }
 }
 
 module.exports = function(context, entities, callback){
-  var returnObject = {execStatus : "CANT_HANDLE", context : context};
+    var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-  goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
-  if (err) throw err;
-    goInstance.GetProfile(function(err, profile) {
-      if (err) throw err;
+    goInstance.init(pUsername, pPassword, pLocation, 'google', function(err){
+    if (err) throw err;
+        goInstance.GetProfile(function(err, profile) {
+            if (err) throw err;
 
-      function doTheThing(){
-              goInstance.Heartbeat(function(err,hb) {
-        if (err) throw err;
+            // Because of rate limiting on the the api, we must wait a little bit before we do a heartbeat.
+            function attemptHeartbeat(){
+                goInstance.Heartbeat(function(err,hb) {
+                    if (err) throw err;
 
-        var pokemonArray = [];
-        var outputMessage = ["The nearby pokemon are:"];
+                    var pokemonArray = [];
+                    var outputMessage = ["The nearby pokemon are:"];
 
-        for (var i = hb.cells.length - 1; i >= 0; i--) {
-          if(hb.cells[i].NearbyPokemon[0]) {
-            var pokemonCell = hb.cells[i];
-            for(var j = 0; j < pokemonCell.NearbyPokemon.length; j++) {
-              var pokemon = goInstance.pokemonlist[parseInt(pokemonCell.
-                                       NearbyPokemon[j].PokedexNumber)-1];
-              pokemonArray.push(" " + pokemon.name);
+                    for (var i = hb.cells.length - 1; i >= 0; i--) {
+                        if(hb.cells[i].NearbyPokemon[0]) {
+                            var pokemonCell = hb.cells[i];
+                            for(var j = 0; j < pokemonCell.NearbyPokemon.length; j++) {
+                                var pokemon = goInstance.pokemonlist[parseInt(
+                                    pokemonCell.NearbyPokemon[j].PokedexNumber)-1];
+                                pokemonArray.push(" " + pokemon.name);
+                            }
+                        }
+                    }
+
+                    returnObject.context.result = "Some nearby pokemon are:" + pokemonArray.join();
+                    returnObject.execStatus = "SUCCESS";
+
+                    callback(returnObject);
+                });
             }
-          }
-        }
 
-        returnObject.context.result = "Some nearby pokemon are:" + pokemonArray.join();
-        returnObject.execStatus = "SUCCESS";
-
-        callback(returnObject);
-      });
-      }
-      setTimeout(doTheThing, 3000);
-    });
+            setTimeout(attemptHeartbeat, 3000);
+        });
     });
 };
