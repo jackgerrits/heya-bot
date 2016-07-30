@@ -63,11 +63,7 @@ var actions = {
       // Yay, we found our recipient!
       // Let's forward our bot response to her.
       // We return a promise to let our bot know when we're done sending
-      return sendMessage(recipientId, text).then(function () {
-        return null;
-      }).catch(function (err) {
-        console.error('Oops! An error occurred while forwarding the response to', recipientId, ':', err.stack || err);
-      });
+      return sendMessage(recipientId, text);
     } else {
       console.error('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
@@ -84,6 +80,7 @@ var actions = {
         console.error("There was an error when handling intent: " + entities.intent);
         resultPair.context.result = "No functions handled this question.";
       }
+      console.log(resultPair);
       return resolve(resultPair.context);
     });
   }
