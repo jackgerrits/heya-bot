@@ -26,7 +26,7 @@ module.exports = function(context, entities, callback){
     goInstance.GetProfile(function(err, profile) {
       if (err) throw err;
       goInstance.Heartbeat(function(err,hb) {
-        if (err) throw err;
+        if (err) console.log(err);
 
         var pokemonArray = [];
         var outputMessage = ["The nearby pokemon are: "];

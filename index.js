@@ -145,7 +145,6 @@ app.post('/webhook', function (req, res) {
           // Yay! We got a new message!
           // We retrieve the Facebook user ID of the sender
           const sender = event.sender.id;
-          console.log(event);
           // We retrieve the user's current session, or create one if it doesn't exist
           // This is needed for our bot to figure out the conversation history
           const sessionId = findOrCreateSession(sender);
@@ -181,7 +180,7 @@ app.post('/webhook', function (req, res) {
               // }
 
               // Updating the user's current session state
-              // sessions[sessionId].context = context;
+              sessions[sessionId].context = context;
             })
             .catch((err) => {
               console.error('Oops! Got an error from Wit: ', err.stack || err);
