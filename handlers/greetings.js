@@ -14,7 +14,7 @@ var responses = ["Hey boss 👽", "Yeah man?"];
 registry.registerHandler(function(context, entities, callback){
     var returnObject = {execStatus : "CANT_HANDLE", context : context};
 
-    if(entities.intent == "greeting"){
+    if(registry.findMostLikelyEntity(entities, "intent") == "greeting") {
         returnObject.execStatus = "SUCCESS";
         returnObject.context.result = responses[getRandomInt(0, responses.length - 1)];
     }

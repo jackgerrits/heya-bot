@@ -20,6 +20,7 @@ Handler.prototype = {
     }
 }
 
+
 function intentHandler() {
     var head = null;
 
@@ -27,7 +28,23 @@ function intentHandler() {
         SUCCESS : "SUCCESS",
         FAILURE : "FAILURE",
         CANT_HANDLE : "CANT_HANDLE"
-    }
+    };
+
+    // { intent: [ { confidence: 0.9688451558848296, value: 'greeting' } ] }
+    this.findMostLikelyEntity = function(entities, name){
+        var possibilities = entities[name];
+        var bestConfidence = 0;
+        var bestValue = "";
+
+        for(var i = 0; i < possibilities.length; i++){
+            if(possibilities[i].confidence > bestConfidence){
+                bestConfidence = possibilities[i].confidence;
+                bestValue = possibilities[i].value;
+            }
+        }
+
+        return bestValue;
+    };
 
     // Handler must be a funtion that accepts context and entities
     this.registerHandler = function(func){
@@ -38,7 +55,7 @@ function intentHandler() {
             head.setNext(next);
             head = next;
         }
-    }
+    };
 
     this.handleRequest = function(context, entities, callback) {
         if(head === null){
@@ -46,7 +63,7 @@ function intentHandler() {
         } else {
             head.execute(context, entities, callback);
         }
-    }
+    };
 
     return this;
 }
