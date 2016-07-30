@@ -6,9 +6,10 @@ var Handler = function(func){
 Handler.prototype = {
     execute : function(context, entities, callback){
         this.func(context, entities, function(resultPair){
+            console.log(this.next);
             if(resultPair.execStatus == "FAILURE" || resultPair.execStatus == "SUCCESS"){
                 callback(resultPair);
-            } else if (this.next === null){
+            } else if (this.next == null){
                 callback({execStatus : this.RESULTS.CANT_HANDLE, context : context});
             } else {
                 this.next.execute(context, entities, callback);
