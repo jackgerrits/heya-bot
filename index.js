@@ -100,9 +100,9 @@ var actions = {
       return Promise.resolve();
     }
   },
-  handleIntent: function handleIntent(_ref3) {
-    var context = _ref3.context;
-    var entities = _ref3.entities;
+  handleIntent: function handleIntent({context, entities}) {
+    // var context = _ref3.context;
+    // var entities = _ref3.entities;
 
     return new Promise(function (resolve, reject) {
       var resultPair = intentHandlerClass.handleRequest(context, entities);

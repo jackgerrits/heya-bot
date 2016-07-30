@@ -14,6 +14,8 @@ function intentHandler() {
 
     this.handleRequest = function(context, entities) {
         var result = this.RESULTS.CANT_HANDLE;
+        console.log(context);
+        console.log(entities);
 
         for(var i = 0; i < handlers.length; ++i){
             result = handlers[i](context, entities);
