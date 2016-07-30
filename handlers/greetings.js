@@ -22,4 +22,4 @@ module.exports = function(context, entities, callback){
     }
 
     callback(returnObject);
-;}
+};
