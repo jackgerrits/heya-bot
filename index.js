@@ -8,7 +8,6 @@ var Wit = require('node-wit').Wit;
 var log = require('node-wit').log;
 var fbMessage = require('./fbMessage.js');
 
-
 // Register intent handlers!
 var intentHandlerClass = require("./intentHandler.js");
 var greetings = require("./handlers/greetings.js");
@@ -16,6 +15,7 @@ var pokemon = require("./handlers/pokego.js");
 var weather = require("./handlers/weather.js");
 var reminder = require("./handlers/reminder.js");
 var joke = require("./handlers/joke.js");
+var help = require("./handlers/help.js");
 
 intentHandlerClass.registerHandler("greeting", greetings);
 intentHandlerClass.registerHandler("pokemon", pokemon);
@@ -23,6 +23,7 @@ intentHandlerClass.registerHandler("weather_temperature", weather.weather_temper
 intentHandlerClass.registerHandler("weather_rain", weather.weather_rain);
 intentHandlerClass.registerHandler("reminder", reminder);
 intentHandlerClass.registerHandler("joke", joke);
+intentHandlerClass.registerHandler("help", help);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
