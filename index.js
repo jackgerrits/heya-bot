@@ -98,10 +98,9 @@ var actions = {
     }
   },
   handleIntent: function({context, entities}) {
+    return new Promise(function (resolve, reject) {
     console.log(context);
     console.log(entities);
-
-    return new Promise(function (resolve, reject) {
       var resultPair = intentHandlerClass.handleRequest(context, entities, function(resultPair){
           if (resultPair.execStatus == intentHandlerClass.RESULTS.CANT_HANDLE) {
             console.error("There was an error when handling intent: " + entities.intent);
@@ -132,25 +131,22 @@ app.post('/webhook', function (req, res) {
   // Parse the Messenger payload
   // See the Webhook reference
   // https://developers.facebook.com/docs/messenger-platform/webhook-reference
-  var data = req.body;
+  const data = req.body;
 
   if (data.object === 'page') {
-    data.entry.forEach(function (entry) {
-      entry.messaging.forEach(function (event) {
+    data.entry.forEach(entry => {
+      entry.messaging.forEach(event => {
         if (event.message) {
           // Yay! We got a new message!
           // We retrieve the Facebook user ID of the sender
-          var sender = event.sender.id;
+          const sender = event.sender.id;
 
           // We retrieve the user's current session, or create one if it doesn't exist
           // This is needed for our bot to figure out the conversation history
-          var sessionId = findOrCreateSession(sender);
+          const sessionId = findOrCreateSession(sender);
 
           // We retrieve the message content
-          var _event$message = event.message;
-          var text = _event$message.text;
-          var attachments = _event$message.attachments;
-
+          const {text, attachments} = event.message;
 
           if (attachments) {
             // We received an attachment
@@ -159,13 +155,14 @@ app.post('/webhook', function (req, res) {
             .catch(console.error);
           } else if (text) {
             // We received a text message
-            console.log(text);
+
             // Let's forward the message to the Wit.ai Bot Engine
             // This will run all actions until our bot has nothing left to do
-            wit.runActions(sessionId, // the user's current session
-            text, // the user's message
-            sessions[sessionId].context // the user's current session state
-            ).then(function (context) {
+            wit.runActions(
+              sessionId, // the user's current session
+              text, // the user's message
+              sessions[sessionId].context // the user's current session state
+            ).then((context) => {
               // Our bot did everything it has to do.
               // Now it's waiting for further messages to proceed.
               console.log('Waiting for next user messages');
@@ -179,12 +176,14 @@ app.post('/webhook', function (req, res) {
 
               // Updating the user's current session state
               sessions[sessionId].context = context;
-            }).catch(function (err) {
+            })
+            .catch((err) => {
               console.error('Oops! Got an error from Wit: ', err.stack || err);
-            });
+            })
           }
         } else {
-          console.log('received event', JSON.stringify(event));
+          // usually read receipt, ignore for now
+          // console.log('received event', JSON.stringify(event));
         }
       });
     });
