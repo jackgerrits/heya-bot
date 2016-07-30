@@ -45,6 +45,8 @@ module.exports = function(context, entities, callback){
                         }
                     }
 
+                    pokemonArray = Array.from(new Set(pokemonArray));
+
                     returnObject.context.result = "Some nearby pokemon are:" + pokemonArray.join();
                     returnObject.execStatus = "SUCCESS";
 
