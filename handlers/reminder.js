@@ -29,7 +29,7 @@ module.exports = function(context, entities, callback){
     if(!reminderString) {
         reminderString = "Reminding you!";
     } else {
-        reminderString = "Don't forget to" + reminderString;
+        reminderString = "Don't forget to " + reminderString;
     }
 
 
